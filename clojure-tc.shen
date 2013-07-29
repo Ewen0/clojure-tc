@@ -1,11 +1,28 @@
 \* TEST *\
-'a
+
+(set yyy (/. X 3))
+
+((value yyy) a)
+
+(datatype yyy-type
+  __________
+  (value yyy) : (symbol --> number);)
+
+a
 '[quote a]
+
+(preclude [symbol])
 
 \*(defmacro defn-macro
 [defn F COMMENTS [PARAMS] BODY] -> [define F PARAMS -> BODY]])*\
 
+(define two-first
+  [X Y | Z] -> [X Y])
+
+(map (/. X (shen.typecheck X (gensym (protect A)))) (two-first (convert-quotes (read-file "/home/ewen/shen/clojure-tc/clojure-tc.shen"))))
+
 (shen.typecheck (head (convert-quotes (read-file "/home/ewen/shen/clojure-tc/clojure-tc.shen"))) (gensym (protect A)))
+
 
 
 \* LOAD DEPENDENCIES *\
@@ -137,9 +154,13 @@ we trap the error and return false.
 
 (datatype quote-type
   _______________
-  quote : (symbol --> symbol);)
+  quote : (A --> A);)
 
 (datatype quote-type2
   _______________
   quote : (number --> symbol);)
+
+
+
+
 
