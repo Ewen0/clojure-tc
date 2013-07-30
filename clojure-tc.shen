@@ -1,37 +1,83 @@
 \* TEST *\
 
-(set yyy (/. X 3))
+(set yyy (/.* [a b | c] -> 2))
 
-((value yyy) a)
+((value yyy) [a])
 
 (datatype yyy-type
   __________
-  (value yyy) : (symbol --> number);)
+  (value yyy) : ((list symbol) --> number);)
 
 a
 '[quote a]
 
-(preclude [symbol])
 
-\*(defmacro defn-macro
-[defn F COMMENTS [PARAMS] BODY] -> [define F PARAMS -> BODY]])*\
+
+
+
+
+
+
+
+
+
+
+
+\*********\
+\* TESTS *\
+\*********\
 
 (define two-first
   [X Y | Z] -> [X Y])
+
+\*
 
 (map (/. X (shen.typecheck X (gensym (protect A)))) (two-first (convert-quotes (read-file "/home/ewen/shen/clojure-tc/clojure-tc.shen"))))
 
 (shen.typecheck (head (convert-quotes (read-file "/home/ewen/shen/clojure-tc/clojure-tc.shen"))) (gensym (protect A)))
 
+*\
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+\*********************\
 \* LOAD DEPENDENCIES *\
+\*********************\
+
 (cd "/home/ewen/shen/clojure-tc/")
 (load "list.shen")
 
 
 
-\************** Quotes ********************************\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\**********\
+\* Quotes *\
+\**********\
 
 (defmacro neq-macro
   [!= | X] -> [not [= | X]])
@@ -87,11 +133,32 @@ we trap the error and return false.
   X -> X)
 
 
-(convert-quotes [['r] u [p 'y] t ' [a] 't ' [cons e ['y]]])
+\* (convert-quotes [['r] u [p 'y] t ' [a] 't ' [cons e ['y]]]) *\
 
 
 
-\************** Shen lists to vectors ******************\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\*************************\
+\* Shen lists to vectors *\
+\*************************\
 
 (defmacro vec-macro
   [] -> <>
@@ -99,7 +166,22 @@ we trap the error and return false.
 
 
 
-\************** CLOJURE FN ******************\
+
+
+
+
+
+
+
+
+
+
+
+
+\**************\
+\* CLOJURE FN *\
+\**************\
+
 
 \* Example *\
 \* (macroexpand [clojure.core/fn [A] "e"]) -> [lambda A "e"]  *\
@@ -108,11 +190,55 @@ we trap the error and return false.
 (defmacro l-macro
   [ /.* | PatternsActions] -> (let TmpName (intern (str (gensym tmpname)))
                                    DBody (tail (tail (compile
-						      shen-.<define> [ TmpName | PatternsActions])))
+						      shen.<define> 
+						      [ TmpName | PatternsActions])))
 				[/. | (append (head DBody) (tail DBody))]))
 
 
+(datatype hd-type
+  ______________
+  hd : ((list A) --> A);)
+
+(datatype tl-type
+  ______________
+  tl : ((list A) --> (list A));)
+
+(defmacro cond-macro
+  [cond [CaseP CaseR] | []]
+  -> [if CaseP CaseR [simple-error "True condition not found"]]
+  [cond [CaseP CaseR] | OtherCases]
+  -> [if CaseP CaseR (cons cond OtherCases)])
+
+(datatype f_error-type
+  _______________
+  shen.f_error : (symbol --> A);)
+
+
+
+\* (macroexpand [/.* a -> 2]) *\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \* *\
+\* 
 (define normalize-fn-param
   [cons X []] -> [X]
   X -> X)
@@ -122,6 +248,7 @@ we trap the error and return false.
 
 (defmacro fn-macro
   [clojure.core/fn Params Body] -> (normalize-fn-param Params))
+*\
 
 
 
@@ -131,34 +258,18 @@ we trap the error and return false.
 
 
 
-(datatype symbol-type
+\*(datatype symbol-type
   if (symbol? X)
   ____________
-  (quote X) : symbol;)
+  (quote X) : symbol;)*\
 
-(datatype val-type
-  let Val (value S)
-  Val : number;
-  ___________
-  S : number;)
 
-(datatype val-type
-  ___________
-  b : number;)
 
-(define quote
-  {}
-  X -> X)
 
-(lambda X X)
-
-(datatype quote-type
+\*(datatype quote-type
   _______________
-  quote : (A --> A);)
+  quote : (A --> A);)*\
 
-(datatype quote-type2
-  _______________
-  quote : (number --> symbol);)
 
 
 
